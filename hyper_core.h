@@ -37,6 +37,13 @@ string get_string(const char* prompt){
 	return str;
 	
 	}
+
+/* eleman eklemek için Int_AddElement(dizi, boyut, ekelenecek eleman) */
+void Int_AddElement(int** arry,int size, int element){
+	int* temp = realloc(*arry,(size+1) * sizeof(int));
+	*arry = temp;
+	(*arry)[size] = element;
+	}
 	
 
 
