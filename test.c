@@ -17,7 +17,8 @@ int main(void){
 	for(int i = 0; i < 5; i++){
 		printf("%d-",arry[i]);
 		}
-	
+
+	/* add element */
 	for(int i = 5; i < 10; i++){
 		Int_AddElement(&arry,i,i+1);
 		}
