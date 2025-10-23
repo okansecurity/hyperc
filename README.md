@@ -1,7 +1,9 @@
-# A ADHD PROJECT
+# HYPERC 
 
 This project is an experimental endeavor I started with the goal of **extending the C language and adapting it to my own needs**.  
 As a developer with ADHD, I apply my own methods to make the coding process fun and fluid.
+
+The name HyperC is inspired by ADHD, specifically the hyperactivity aspect.
 
 ---
 
