@@ -1,5 +1,5 @@
-#ifndef HYPERC_H
-#define HYPERC_H
+#ifndef HYPER_CORE_H
+#define HYPER_CORE_H
 
 
 // Library special definitions 
@@ -41,4 +41,4 @@ string get_string(const char* prompt){
 
 
 
-#endif /* HYPERC_H */ 
+#endif /* HYPER_CORE_H */ 
