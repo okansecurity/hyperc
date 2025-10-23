@@ -38,9 +38,21 @@ string get_string(const char* prompt){
 	
 	}
 
-/* eleman eklemek için Int_AddElement(dizi, boyut, ekelenecek eleman) */
+/* add for element Int_AddElement(&arry, size, new_element) */
 void Int_AddElement(int** arry,int size, int element){
 	int* temp = realloc(*arry,(size+1) * sizeof(int));
+	*arry = temp;
+	(*arry)[size] = element;
+	}
+	
+void Float_AddElement(float** arry,int size, float element){
+	float* temp = realloc(*arry,(size+1) * sizeof(float));
+	*arry = temp;
+	(*arry)[size] = element;
+	}
+
+void Double_AddElement(double** arry,int size, double element){
+	double* temp = realloc(*arry,(size+1) * sizeof(double));
 	*arry = temp;
 	(*arry)[size] = element;
 	}
