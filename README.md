@@ -24,3 +24,115 @@ This project is a **personal, experimental effort to develop C according to my o
 My aim is to go beyond classic C and build a **more flexible, user-focused foundation**.  
 
 > ⚡ Note: This is an ADHD project! Ideas come fast, code evolves through trial and error, and fun is a priority.  
+
+
+# HyperC Core Functions
+
+HyperC provides a set of helper functions for working with dynamic arrays and strings in C. These functions allow you to **add** and **delete** elements from arrays of various data types safely and efficiently, as well as read user input as strings.
+
+---
+
+## 1. Reading Strings
+
+```c
+string get_string(const char* prompt);
+```
+
+- **Description:** Reads a string from standard input. Allocates memory dynamically for the string.  
+- **Parameters:**  
+  - `prompt` – (optional) Message to display before reading input. Pass `NULL` to skip prompt.  
+- **Returns:** A dynamically allocated string. Remember to free it after use.  
+- **Example:**
+
+```c
+string name = get_string("Enter your name: ");
+printf("Hello, %s!\n", name);
+free(name);
+```
+
+---
+
+## 2. Adding Elements to Arrays
+
+All `*_AddElement` functions have the following signature pattern:
+
+```c
+void Type_AddElement(Type** array, int size, Type element, int place_to_add);
+```
+
+- **Description:** Adds an element to a dynamic array of a specific type.  
+- **Parameters:**  
+  - `array` – Pointer to the array.  
+  - `size` – Current size of the array.  
+  - `element` – The element to add.  
+  - `place_to_add` – Index where the element should be inserted. Use `ARRY_END` to append at the end.  
+- **Supported Types:**  
+  - `short`, `unsigned short`, `int`, `unsigned int`  
+  - `long`, `unsigned long`, `long long`, `unsigned long long`  
+  - `float`, `double`, `long double`  
+
+- **Example:**
+
+```c
+int* numbers = malloc(sizeof(int) * 3);
+numbers[0] = 1;
+numbers[1] = 2;
+numbers[2] = 3;
+
+// Add 99 at index 1
+Int_AddElement(&numbers, 3, 99, 1);
+
+// Add 100 at the end
+Int_AddElement(&numbers, 4, 100, ARRY_END);
+
+// Cleanup
+free(numbers);
+```
+
+---
+
+## 3. Deleting Elements from Arrays
+
+All `*_DellElement` functions have the following signature pattern:
+
+```c
+void Type_DellElement(Type** array, int size, int element_index);
+```
+
+- **Description:** Deletes an element from a dynamic array of a specific type. Memory is reallocated to the new size.  
+- **Parameters:**  
+  - `array` – Pointer to the array.  
+  - `size` – Current size of the array.  
+  - `element_index` – Index of the element to delete. Use `ARRY_END` to delete the last element.  
+- **Supported Types:**  
+  - Same as `*_AddElement`.  
+
+- **Example:**
+
+```c
+int* numbers = malloc(sizeof(int) * 5);
+numbers[0] = 10;
+numbers[1] = 20;
+numbers[2] = 30;
+numbers[3] = 40;
+numbers[4] = 50;
+
+// Delete element at index 2 (30)
+Int_DellElement(&numbers, 5, 2);
+
+// Delete the last element
+Int_DellElement(&numbers, 4, ARRY_END);
+
+// Cleanup
+free(numbers);
+```
+
+---
+
+## 4. Notes & Best Practices
+
+1. **Memory Management:** All functions that add elements dynamically allocate memory. Always free arrays when no longer needed.  
+2. **Index Safety:** If `place_to_add` or `element_index` is out of bounds, the function defaults to the array end or prints an error.  
+3. **Compatibility:** Works with all standard integer and floating point types, making it versatile for general C programming.  
+
+---
