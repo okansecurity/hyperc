@@ -1,110 +1,71 @@
-// In development
-
+// İn development
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 
+typedef struct Property {
+    char *key;
+    char *value;
+    struct Property *next;
+} Property;
 
-typedef struct{
-    char* key;
-    char* value;
-} Properties;
-
-typedef struct{
-    int label_id;
-    char* label_name;
-} Label;
-    
-typedef struct{
-    int Node_id;
-    char* Node_name;
-    int Node_Label_id;
-    Properties* Node_Properties;
-    int property_count;
+typedef struct Node {
+    int id;
+    Property *property;
+    struct Node *next;
 } Node;
 
+typedef struct Edge {
+    int from_id;
+    int to_id;
+    char *label;
+    struct Edge *next;
+} Edge;
 
-void create_database_dir(void) {
-	#ifdef _WIN32
-		_mkdir("database");
-	#else
-		mkdir("database", 0777);
-	#endif
+typedef struct Graph {
+    Node *nodes;
+    Edge *edges;
+} Graph;
+
+Graph* create_graph() {
+    Graph *g = (Graph*) malloc(sizeof(Graph));
+    g->nodes = NULL;
+    g->edges = NULL;
+    return g;
 }
 
-Label* Create_label(int id, const char* new_label_name){
-	
-	/* Creat label */
-    Label* label = malloc(sizeof(Label));
-    if(!label){
-		return NULL;
-	}
-
-    label->label_id = id;
-    label->label_name = malloc(strlen(new_label_name) + 1);
-    strcpy(label->label_name, new_label_name);
-    
-    /* add file */
-    create_database_dir();
-
-    int file_name_size = strlen("database/") + strlen("labels.cdb") + 1;
-	char* file_name = malloc(sizeof(file_name_size));
-
-	snprintf(file_name, file_name_size, "database/labels.cdb");
-
-    FILE* label_file = fopen(file_name,"a");
-    if(!label_file){
-        return label;
-    }
-    
-    fprintf(label_file, "%d=%s\n", id, new_label_name);
-    
-    fclose(label_file);
-	free(file_name);
-	
-    return label;
-}
-
-Node* Create_node(int id, const char* name, const char* label_id_for_node, int property_count){
-	/* create node */
-    Node* node = malloc(sizeof(Node));
-    if(!node) return NULL;
-
-    node->Node_id = id;
-
-    node->Node_name = malloc(strlen(name) + 1);
-    if(!node->Node_name){
-        free(node);
-        return NULL;
-    }
-    
-    strcpy(node->Node_name, name);
-
-    node->Node_Label_id = label_id_for_node;
-    node->property_count = property_count;
-
-    node->Node_Properties = NULL;
-
-	/* add file */
-    create_database_dir();
-
-    int file_name_size = strlen("database/") + strlen("nodes.cdb") + 1;
-	char* file_name = malloc(file_name_size);
-
-	snprintf(file_name, file_name_size, "database/nodes.cdb");
-
-    FILE* node_file = fopen(file_name,"a");
-    if(!node_file){
-        return node;
-    }
-    
-    fprintf(node_file, "%d=%s=%d=%d\n", node->Node_id, node->Node_name,node->Node_Label_id,node->property_count);
-    
-    fclose(node_file);
-	free(file_name);
-	
+Node* create_node(int id) {
+    Node *node = (Node*) malloc(sizeof(Node));
+    node->id = id;
+    node->property = NULL;
+    node->next = NULL;
     return node;
+}
+
+void add_property(Node *node, const char *key, const char *value) {
+    Property *property = (Property*) malloc(sizeof(Property));
+    property->key = strdup(key);
+    property->value = strdup(value);
+    property->next = node->property;
+    node->property = property;
+}
+
+Edge* create_edge(int from_id, int to_id, const char *label) {
+    Edge *edge = (Edge*) malloc(sizeof(Edge));
+    edge->from_id = from_id;
+    edge->to_id = to_id;
+    edge->label = strdup(label);
+    edge->next = NULL;
+    return edge;
+}
+
+void add_node(Graph *graph, Node *node) {
+    node->next = graph->nodes;
+    graph->nodes = node;
+}
+
+void add_edge(Graph *graph, Edge *edge) {
+    edge->next = graph->edges;
+    graph->edges = edge;
 }
 
