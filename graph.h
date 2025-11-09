@@ -1,71 +1,56 @@
-// İn development
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdlib.h>
+#include <time.h>
 #include <string.h>
 
-typedef struct Property {
-    char *key;
-    char *value;
-    struct Property *next;
-} Property;
+typedef struct Properties{
+	char* key;
+	char* value;
+	struct Properties* next;
+	}Properties;
 
-typedef struct Node {
-    int id;
-    Property *property;
-    struct Node *next;
-} Node;
+typedef struct Label{
+	char* LabelName;
+	int LabelId;
+	}Label;
+	
+typedef struct node{
+	int id;
+	char* NodeName;
+	Label* node_label;
+	Properties* node_properties;
+	}node;
 
-typedef struct Edge {
-    int from_id;
-    int to_id;
-    char *label;
-    struct Edge *next;
-} Edge;
+typedef struct Edges{
+	Label* edges_label;
+	node* source_node;
+	node* destination_node;
+	Properties* edges_properties;
+	}Edges;
 
-typedef struct Graph {
-    Node *nodes;
-    Edge *edges;
-} Graph;
+node* create_node(const char* label_name, const char* node_name) {
+    node* x = malloc(sizeof(node));
+    if (!x) return NULL;
 
-Graph* create_graph() {
-    Graph *g = (Graph*) malloc(sizeof(Graph));
-    g->nodes = NULL;
-    g->edges = NULL;
-    return g;
-}
+    x->id = rand();
 
-Node* create_node(int id) {
-    Node *node = (Node*) malloc(sizeof(Node));
-    node->id = id;
-    node->property = NULL;
-    node->next = NULL;
-    return node;
-}
+	// label oluşturuyor burada / İleride eğer node varsa sadece o nodeyi ekle bölümü eklenecek
+    x->node_label = malloc(sizeof(Label));
+    if (!x->node_label) {
+        free(x);
+        return NULL;
+    }
 
-void add_property(Node *node, const char *key, const char *value) {
-    Property *property = (Property*) malloc(sizeof(Property));
-    property->key = strdup(key);
-    property->value = strdup(value);
-    property->next = node->property;
-    node->property = property;
-}
+    x->node_label->LabelId = rand();
+    x->node_label->LabelName = malloc(strlen(label_name) + 1);
+    strcpy(x->node_label->LabelName, label_name);
 
-Edge* create_edge(int from_id, int to_id, const char *label) {
-    Edge *edge = (Edge*) malloc(sizeof(Edge));
-    edge->from_id = from_id;
-    edge->to_id = to_id;
-    edge->label = strdup(label);
-    edge->next = NULL;
-    return edge;
-}
-
-void add_node(Graph *graph, Node *node) {
-    node->next = graph->nodes;
-    graph->nodes = node;
-}
-
-void add_edge(Graph *graph, Edge *edge) {
-    edge->next = graph->edges;
-    graph->edges = edge;
+    x->NodeName = malloc(strlen(node_name) + 1);
+    strcpy(x->NodeName, node_name);
+	
+	// properties'leri boşa atıyorum çünkü add_properties fonksiyonu yazılacak
+    x->node_properties = NULL;
+    
+    return x;
 }
 
