@@ -54,3 +54,24 @@ node* create_node(const char* label_name, const char* node_name) {
     return x;
 }
 
+void add_properties(node* node_in_func, const char* key, const char* value) {
+    if (!node_in_func) return;
+
+    Properties* new_prop = malloc(sizeof(Properties));
+    if (!new_prop) return;
+
+    new_prop->key = malloc(strlen(key) + 1);
+    new_prop->value = malloc(strlen(value) + 1);
+
+    strcpy(new_prop->key, key);
+    strcpy(new_prop->value, value);
+    new_prop->next = NULL;
+
+    if (!node_in_func->node_properties) {
+        node_in_func->node_properties = new_prop;
+    } else {
+        Properties* tmp = node_in_func->node_properties;
+        while (tmp->next) tmp = tmp->next;
+        tmp->next = new_prop;
+    }
+}
